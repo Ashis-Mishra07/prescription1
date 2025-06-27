@@ -9,19 +9,48 @@ def handle_user_input(user_question):
             'question': user_question,
             'chat_history': st.session_state.chatHistory
         })
-
     st.session_state.chatHistory = response['chat_history']
 
 # 🚀 Main Streamlit UI
 def main():
     st.set_page_config("PDF QA with Groq", layout="wide")
 
+    # Sidebar width adjustment
     st.markdown("""
         <style>
-            /* Increase sidebar width */
             [data-testid="stSidebar"] {
                 min-width: 350px;
                 max-width: 350px;
+            }
+            .input-container {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                margin-top: 30px;
+            }
+            .custom-input input {
+                background-color: #111827;
+                color: white;
+                border: 1px solid #4b5563;
+                border-radius: 10px;
+                padding: 10px 15px;
+                width: 100%;
+            }
+            .custom-submit {
+                margin-top: 15px;
+                background: linear-gradient(to right, #10b981, #059669);
+                color: white;
+                padding: 10px 25px;
+                border: none;
+                border-radius: 10px;
+                font-size: 16px;
+                font-weight: bold;
+                cursor: pointer;
+                transition: all 0.3s ease;
+            }
+            .custom-submit:hover {
+                background: linear-gradient(to right, #059669, #047857);
+                transform: scale(1.05);
             }
         </style>
     """, unsafe_allow_html=True)
@@ -41,12 +70,15 @@ def main():
     if "chatHistory" not in st.session_state:
         st.session_state.chatHistory = []
 
-    # ➕ Input with submit button
-    col1, col2 = st.columns([5, 1])
-    with col1:
-        user_question = st.text_input("Ask a question about your PDF files:", key="question_input")
-    with col2:
-        submit_clicked = st.button("Submit")
+    # ➕ Input with Submit button below
+    with st.container():
+        st.markdown('<div class="input-container">', unsafe_allow_html=True)
+        user_question = st.text_input(
+            "", placeholder="Ask a question about your PDF files:",
+            key="question_input", label_visibility="collapsed"
+        )
+        submit_clicked = st.button("Submit", key="submit_button")
+        st.markdown('</div>', unsafe_allow_html=True)
 
     if submit_clicked and user_question and st.session_state.conversation:
         handle_user_input(user_question)
