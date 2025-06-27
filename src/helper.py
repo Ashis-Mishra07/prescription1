@@ -1,14 +1,16 @@
 import os
 from PyPDF2 import PdfReader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain.vectorstores import FAISS
+from langchain_community.vectorstores import FAISS
 from langchain.chains import ConversationalRetrievalChain
 from langchain.memory import ConversationBufferMemory
 from langchain.embeddings import HuggingFaceEmbeddings
 from langchain_groq import ChatGroq
 from dotenv import load_dotenv
 
+# Load environment variables
 load_dotenv()
+
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 
 def get_pdf_text(pdf_docs):
